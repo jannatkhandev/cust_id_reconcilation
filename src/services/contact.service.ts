@@ -1,4 +1,4 @@
-import { Contact } from "@prisma/client";
+import { Contact, Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 
 interface IdentifyInput {
@@ -16,7 +16,7 @@ interface IdentifyResult {
 export async function identifyContact({ email, phoneNumber }: IdentifyInput): Promise<IdentifyResult> {
   // Wrap everything in a transaction so concurrent requests don't create duplicate primaries
   // or produce inconsistent cluster state.
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
 
     // --- Step 1: Find all existing contacts that share the incoming email or phone ---
     const orConditions = [];
